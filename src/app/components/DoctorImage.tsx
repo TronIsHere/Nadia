@@ -14,9 +14,9 @@ export function DoctorImage({ size = "lg" }: DoctorImageProps) {
 
   if (usePlaceholder) {
     return (
-      <div className={`relative ${sizeClass} overflow-hidden shadow-xl ring-2 ring-teal-100 flex-shrink-0 bg-teal-100 flex items-center justify-center`}>
+      <div className={`relative ${sizeClass} overflow-hidden shadow-xl ring-2 ring-zinc-600 flex-shrink-0 bg-zinc-800 flex items-center justify-center`}>
         <svg
-          className={isSm ? "w-8 h-8 text-teal-300" : "w-24 h-24 text-teal-300"}
+          className={isSm ? "w-8 h-8 text-zinc-500" : "w-24 h-24 text-zinc-500"}
           fill="currentColor"
           viewBox="0 0 24 24"
           aria-hidden="true"
@@ -24,14 +24,14 @@ export function DoctorImage({ size = "lg" }: DoctorImageProps) {
           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
         </svg>
         {!isSm && (
-          <span className="absolute bottom-4 text-teal-500 text-sm">عکس دکتر</span>
+          <span className="absolute bottom-4 text-zinc-500 text-sm">عکس دکتر</span>
         )}
       </div>
     );
   }
 
   return (
-    <div className={`relative ${sizeClass} overflow-hidden shadow-xl ring-2 ring-teal-100 flex-shrink-0`}>
+    <div className={`relative ${sizeClass} overflow-hidden shadow-xl ring-2 ring-zinc-600 flex-shrink-0`}>
       <Image
         src="/doctor.jpg"
         alt="دکتر نادیا روشنی"
