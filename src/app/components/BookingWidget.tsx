@@ -40,6 +40,8 @@ function getNextDays(count: number): { date: Date; label: string; dayOfWeek: num
 
 export function BookingWidget() {
   const [step, setStep] = useState<Step>("phone");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [selectedDate, setSelectedDate] = useState<{ date: Date; label: string; dayOfWeek: number } | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -95,23 +97,41 @@ export function BookingWidget() {
           {step === "phone" && (
             <div className="space-y-6">
               <div>
-                <h3 className="text-lg font-bold text-zinc-100 mb-1">شماره موبایل</h3>
+                <h3 className="text-lg font-bold text-zinc-100 mb-1">اطلاعات تماس</h3>
                 <p className="text-sm text-zinc-500 mb-4">
-                  برای مشاهده نوبت‌های خالی و دریافت یادآوری پیامکی وارد کنید
+                  نام، نام خانوادگی و شماره موبایل خود را وارد کنید
                 </p>
-                <input
-                  type="tel"
-                  dir="ltr"
-                  value={phone}
-                  onChange={handlePhoneChange}
-                  placeholder="09123456789"
-                  className="w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-600 text-zinc-100 placeholder-zinc-500 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 outline-none transition text-lg"
-                  maxLength={11}
-                />
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-3">
+                    <input
+                      type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      placeholder="نام"
+                      className="w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-600 text-zinc-100 placeholder-zinc-500 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 outline-none transition"
+                    />
+                    <input
+                      type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      placeholder="نام خانوادگی"
+                      className="w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-600 text-zinc-100 placeholder-zinc-500 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 outline-none transition"
+                    />
+                  </div>
+                  <input
+                    type="tel"
+                    dir="ltr"
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    placeholder="09123456789"
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-600 text-zinc-100 placeholder-zinc-500 focus:border-violet-500 focus:ring-2 focus:ring-violet-500/20 outline-none transition text-lg"
+                    maxLength={11}
+                  />
+                </div>
               </div>
               <button
-                onClick={() => phone.length >= 10 && setStep("date")}
-                disabled={phone.length < 10}
+                onClick={() => firstName.trim() && lastName.trim() && phone.length >= 10 && setStep("date")}
+                disabled={!firstName.trim() || !lastName.trim() || phone.length < 10}
                 className="w-full py-3 rounded-xl bg-violet-600 text-white font-bold hover:bg-violet-500 disabled:opacity-50 disabled:cursor-not-allowed transition"
               >
                 مشاهده نوبت‌های خالی
@@ -204,6 +224,10 @@ export function BookingWidget() {
               <h3 className="text-lg font-bold text-zinc-100">تایید نهایی</h3>
               <div className="bg-zinc-800/50 rounded-xl p-4 space-y-2 border border-zinc-700/50">
                 <div className="flex justify-between text-zinc-300">
+                  <span className="text-zinc-500">نام و نام خانوادگی</span>
+                  <span>{firstName} {lastName}</span>
+                </div>
+                <div className="flex justify-between text-zinc-300">
                   <span className="text-zinc-500">شماره تماس</span>
                   <span dir="ltr">{toPersianNum(phone)}</span>
                 </div>
@@ -253,6 +277,8 @@ export function BookingWidget() {
               <button
                 onClick={() => {
                   setStep("phone");
+                  setFirstName("");
+                  setLastName("");
                   setPhone("");
                   setSelectedDate(null);
                   setSelectedTime(null);
