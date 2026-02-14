@@ -4,6 +4,8 @@ import { useState } from "react";
 
 type Appointment = {
   id: string;
+  firstName: string;
+  lastName: string;
   phone: string;
   date: string;
   time: string;
@@ -15,17 +17,19 @@ const toPersianNum = (n: string) =>
   n.replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[parseInt(d, 10)]);
 
 const MOCK_APPOINTMENTS: Appointment[] = [
-  { id: "1", phone: "09123456789", date: "یکشنبه ۱۵", time: "۹:۳۰", status: "confirmed", createdAt: "امروز" },
-  { id: "2", phone: "09121234567", date: "یکشنبه ۱۵", time: "۱۰:۰۰", status: "confirmed", createdAt: "امروز" },
-  { id: "3", phone: "09359876543", date: "دوشنبه ۱۶", time: "۱۶:۳۰", status: "confirmed", createdAt: "دیروز" },
-  { id: "4", phone: "09131112233", date: "دوشنبه ۱۶", time: "۱۷:۰۰", status: "cancelled", createdAt: "دیروز" },
-  { id: "5", phone: "09198765432", date: "سه‌شنبه ۱۷", time: "۱۰:۰۰", status: "confirmed", createdAt: "۲ روز قبل" },
+  { id: "1", firstName: "علی", lastName: "محمدی", phone: "09123456789", date: "یکشنبه ۱۵", time: "۹:۳۰", status: "confirmed", createdAt: "امروز" },
+  { id: "2", firstName: "مریم", lastName: "احمدی", phone: "09121234567", date: "یکشنبه ۱۵", time: "۱۰:۰۰", status: "confirmed", createdAt: "امروز" },
+  { id: "3", firstName: "رضا", lastName: "کریمی", phone: "09359876543", date: "دوشنبه ۱۶", time: "۱۶:۳۰", status: "confirmed", createdAt: "دیروز" },
+  { id: "4", firstName: "سارا", lastName: "حسینی", phone: "09131112233", date: "دوشنبه ۱۶", time: "۱۷:۰۰", status: "cancelled", createdAt: "دیروز" },
+  { id: "5", firstName: "امیر", lastName: "رضایی", phone: "09198765432", date: "سه‌شنبه ۱۷", time: "۱۰:۰۰", status: "confirmed", createdAt: "۲ روز قبل" },
 ];
 
 export default function PanelPage() {
   const [appointments, setAppointments] = useState<Appointment[]>(MOCK_APPOINTMENTS);
   const [dateFilter, setDateFilter] = useState<string>("all");
   const [showAddModal, setShowAddModal] = useState(false);
+  const [newFirstName, setNewFirstName] = useState("");
+  const [newLastName, setNewLastName] = useState("");
   const [newPhone, setNewPhone] = useState("");
   const [newDate, setNewDate] = useState("");
   const [newTime, setNewTime] = useState("");
@@ -44,10 +48,12 @@ export default function PanelPage() {
   };
 
   const handleAdd = () => {
-    if (!newPhone || !newDate || !newTime) return;
+    if (!newFirstName.trim() || !newLastName.trim() || !newPhone || !newDate || !newTime) return;
     setAppointments((prev) => [
       {
         id: Date.now().toString(),
+        firstName: newFirstName.trim(),
+        lastName: newLastName.trim(),
         phone: newPhone,
         date: newDate,
         time: newTime,
@@ -56,6 +62,8 @@ export default function PanelPage() {
       },
       ...prev,
     ]);
+    setNewFirstName("");
+    setNewLastName("");
     setNewPhone("");
     setNewDate("");
     setNewTime("");
@@ -143,10 +151,13 @@ export default function PanelPage() {
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="font-medium text-zinc-100" dir="ltr">
+                  <p className="font-medium text-zinc-100">
+                    {apt.firstName} {apt.lastName}
+                  </p>
+                  <p className="text-sm text-zinc-500" dir="ltr">
                     {toPersianNum(apt.phone)}
                   </p>
-                  <p className="text-sm text-zinc-500 mt-0.5">
+                  <p className="text-xs text-zinc-600 mt-0.5">
                     {apt.date} • {apt.time}
                   </p>
                 </div>
@@ -180,6 +191,7 @@ export default function PanelPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-zinc-800">
+                  <th className="text-right py-4 px-6 text-zinc-500 font-medium">نام بیمار</th>
                   <th className="text-right py-4 px-6 text-zinc-500 font-medium">شماره تماس</th>
                   <th className="text-right py-4 px-6 text-zinc-500 font-medium">تاریخ</th>
                   <th className="text-right py-4 px-6 text-zinc-500 font-medium">ساعت</th>
@@ -190,7 +202,10 @@ export default function PanelPage() {
               <tbody>
                 {filteredAppointments.map((apt) => (
                   <tr key={apt.id} className="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition">
-                    <td className="py-4 px-6 font-medium" dir="ltr">
+                    <td className="py-4 px-6 font-medium text-zinc-100">
+                      {apt.firstName} {apt.lastName}
+                    </td>
+                    <td className="py-4 px-6" dir="ltr">
                       {toPersianNum(apt.phone)}
                     </td>
                     <td className="py-4 px-6 text-zinc-300">{apt.date}</td>
@@ -249,6 +264,28 @@ export default function PanelPage() {
               </button>
             </div>
             <div className="p-4 sm:p-6 space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm text-zinc-500 mb-1.5">نام</label>
+                  <input
+                    type="text"
+                    value={newFirstName}
+                    onChange={(e) => setNewFirstName(e.target.value)}
+                    placeholder="نام"
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-600 text-zinc-100 placeholder-zinc-500 focus:border-violet-500 outline-none text-base touch-manipulation"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-zinc-500 mb-1.5">نام خانوادگی</label>
+                  <input
+                    type="text"
+                    value={newLastName}
+                    onChange={(e) => setNewLastName(e.target.value)}
+                    placeholder="نام خانوادگی"
+                    className="w-full px-4 py-3 rounded-xl bg-zinc-800 border border-zinc-600 text-zinc-100 placeholder-zinc-500 focus:border-violet-500 outline-none text-base touch-manipulation"
+                  />
+                </div>
+              </div>
               <div>
                 <label className="block text-sm text-zinc-500 mb-1.5">شماره موبایل</label>
                 <input
@@ -291,7 +328,7 @@ export default function PanelPage() {
               </button>
               <button
                 onClick={handleAdd}
-                disabled={!newPhone || !newDate || !newTime}
+                disabled={!newFirstName.trim() || !newLastName.trim() || !newPhone || !newDate || !newTime}
                 className="flex-1 py-3 rounded-xl bg-violet-600 text-white font-medium hover:bg-violet-500 active:bg-violet-400 disabled:opacity-50 disabled:cursor-not-allowed transition touch-manipulation min-h-[48px]"
               >
                 ثبت نوبت

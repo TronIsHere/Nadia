@@ -36,14 +36,14 @@ export default function Home() {
               نوبت بگیرید، یادآوری دریافت کنید
             </h2>
             <p className="text-lg text-zinc-400">
-              شماره خود را وارد کنید، زمان خالی را انتخاب کنید و ۳۰ دقیقه قبل از نوبت پیامک یادآوری بگیرید
+              نام، شماره موبایل و زمان خالی را وارد کنید و ۳۰ دقیقه قبل از نوبت پیامک یادآوری بگیرید
             </p>
           </div>
 
           {/* Features - horizontal pills */}
           <div className="flex flex-wrap justify-center gap-4 mb-12">
             {[
-              { icon: "📱", label: "شماره موبایل" },
+              { icon: "👤", label: "نام و شماره" },
               { icon: "📅", label: "زمان خالی" },
               { icon: "✅", label: "رزرو نوبت" },
               { icon: "💬", label: "پیامک ۳۰ دقیقه قبل" },
